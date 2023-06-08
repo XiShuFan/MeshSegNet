@@ -1,0 +1,64 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: linux-64
+# _libgcc_mutex==0.1
+# _openmp_mutex==5.1
+# ca-certificates==2022.10.11
+# certifi==2022.12.7
+charset-normalizer==2.1.1
+contourpy==1.0.6
+cycler==0.11.0
+Cython==0.29.32
+deprecated==1.2.13
+fonttools==4.38.0
+idna==3.4
+joblib==1.2.0
+jsonpatch==1.32
+jsonpointer==2.3
+kiwisolver==1.4.4
+# ld_impl_linux-64==2.38
+# libffi==3.4.2
+# libgcc-ng==11.2.0
+# libgomp==11.2.0
+# libstdcxx-ng==11.2.0
+matplotlib==3.5.2
+# ncurses==6.3
+networkx==2.6.2
+numpy==1.21.6
+# nvidia-cublas-cu11==11.10.3.66
+# nvidia-cuda-nvrtc-cu11==11.7.99
+# nvidia-cuda-runtime-cu11==11.7.99
+# nvidia-cudnn-cu11==8.5.0.96
+# openssl==1.1.1
+packaging==22.0
+pandas==1.3.5
+pillow==9.4.0
+# pip==22.3.1
+pygco==0.0.16
+pyparsing==3.0.9
+python-dateutil==2.8.2
+pytz==2022.7
+# readline==6.2 # pyreadline
+requests==2.28.1
+scikit-learn==1.0.2
+# scipy==1.10.0
+setuptools==65.5.0
+six==1.16.0
+# sqlite==3.40.0
+threadpoolctl==3.1.0
+# tk==8.6.12
+# torch==1.13.1
+# torchaudio==0.13.1
+# torchvision==0.14.1
+tornado==6.2
+typing-extensions==4.4.0
+tzdata==2022.6
+urllib3==1.26.13
+vedo==2022.4.2
+visdom==0.2.3
+vtk==9.2.4
+websocket-client==1.4.2
+wheel==0.37.1
+wrapt==1.14.1
+# xz==5.2.8
+# zlib==1.2.13
