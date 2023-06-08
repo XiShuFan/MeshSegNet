@@ -70,7 +70,7 @@ def main_worker(rank, world_size):
     # train_list = 'D:\\users\\xsf\\Dataset\\OralScan\\train_list_1.csv'
     # val_list = 'D:\\users\\xsf\\Dataset\\OralScan\\val_list_1.csv'
 
-    model_path = 'models/12/'
+    model_path = 'models/13/'
     model_name = 'MeshSegNet_15_classes'  # need to define
     checkpoint_name = 'latest_checkpoint.tar'
 
@@ -122,9 +122,12 @@ def main_worker(rank, world_size):
                             shuffle=val_sampler is None)
 
     # 获得模型
-    model = MeshSegNet(num_classes=num_classes, num_channels=num_channels, with_dropout=True, dropout_p=0.5, cells=patch_size)
+    model = MeshSegNet(num_classes=num_classes, num_channels=num_channels, with_dropout=True, dropout_p=0.5, cells=patch_size, feature_base=32)
     # 优化器
     opt = optim.Adam(model.parameters(), amsgrad=True, lr=1e-3)
+
+    total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print('Total parameters count ', total_params)
 
     if load_pretrain:
         # 加载预训练模型，注意要加载到CPU上，否则可能会导致加载的权重全部集中在一张卡上
