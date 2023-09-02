@@ -192,6 +192,8 @@ class MeshSegNet(nn.Module):
 if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = MeshSegNet().to(device)
+    total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print('Total parameters count ', total_params)
     input = torch.zeros(size=(2, 15, 14000), dtype=torch.float).to(device)
     a_s = torch.zeros(size=(2, 14000, 14000), dtype=torch.float).to(device)
     a_l = torch.zeros(size=(2, 14000, 14000), dtype=torch.float).to(device)

@@ -55,7 +55,7 @@ def copyto(dataset: str, img_path: str, label_path: str):
 
 
 def main():
-    datasets = ['/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan/dataset_labelled_cell_color_downsampled_10000_colorrefine']
+    datasets = ['/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan/dataset_labelled_cell_color_downsampled_10000']
     img_path = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan/img'
     label_path = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan/label'
 

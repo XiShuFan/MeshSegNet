@@ -6,7 +6,7 @@ from torch.optim.lr_scheduler import StepLR
 import torch.optim as optim
 import torch.nn as nn
 from Mesh_dataset import *
-from meshsegnet_ln import *
+from meshsegnet_bn import *
 from losses_and_metrics_for_mesh import *
 import utils
 import pandas as pd
@@ -70,7 +70,7 @@ def main_worker(rank, world_size):
     # train_list = 'D:\\users\\xsf\\Dataset\\OralScan\\train_list_1.csv'
     # val_list = 'D:\\users\\xsf\\Dataset\\OralScan\\val_list_1.csv'
 
-    model_path = 'models/12/'
+    model_path = 'models/14/'
     model_name = 'MeshSegNet_15_classes'  # need to define
     checkpoint_name = 'latest_checkpoint.tar'
 
@@ -78,12 +78,12 @@ def main_worker(rank, world_size):
     num_channels = 18  # number of features
     num_epochs = 600
     num_workers = 8
-    train_batch_size = 1
+    train_batch_size = 8
     val_batch_size = 1
-    num_batches_to_print = 30
+    num_batches_to_print = 10
     # 加载预训练模型
     load_pretrain = False
-    patch_size = 9000
+    patch_size = 6000
 
     # mkdir 'models'
     if not os.path.exists(model_path):
@@ -122,9 +122,12 @@ def main_worker(rank, world_size):
                             shuffle=val_sampler is None)
 
     # 获得模型
-    model = MeshSegNet(num_classes=num_classes, num_channels=num_channels, with_dropout=True, dropout_p=0.5, cells=patch_size)
+    model = MeshSegNet(num_classes=num_classes, num_channels=num_channels, with_dropout=True, dropout_p=0.5)
     # 优化器
     opt = optim.Adam(model.parameters(), amsgrad=True, lr=1e-3)
+
+    total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print('Total parameters count ', total_params)
 
     if load_pretrain:
         # 加载预训练模型，注意要加载到CPU上，否则可能会导致加载的权重全部集中在一张卡上
