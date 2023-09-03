@@ -6,11 +6,8 @@ import pandas as pd
 
 if __name__ == '__main__':
 
-    data_path = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan/augmented_label'
-    output_path = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan'
-
-    # data_path = 'D:\\users\\xsf\\Dataset\\OralScan\\augmented_label'
-    # output_path = 'D:\\users\\xsf\\Dataset\\OralScan'
+    data_path = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan_coarse_10000/train_augmented'
+    output_path = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan_coarse_10000'
 
     # 是否进行了翻转增强
     with_flip = False

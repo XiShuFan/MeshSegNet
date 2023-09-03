@@ -47,11 +47,9 @@ def GetVTKTransformationMatrix(rotate_X=[-180, 180], rotate_Y=[-180, 180], rotat
 
 if __name__ == "__main__":
     # vtk数据路径
-    vtk_path = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan/label'
-    # vtk_path = 'D:\\users\\xsf\\Dataset\\OralScan\\label'
+    vtk_path = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan_coarse_10000/train'
     # 输出数据增强之后的路径
-    output_save_path = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan/augmented_label'
-    # output_save_path = 'D:\\users\\xsf\\Dataset\\OralScan\\augmented_label'
+    output_save_path = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan_coarse_10000/train_augmented'
     if not os.path.exists(output_save_path):
         os.mkdir(output_save_path)
 

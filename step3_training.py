@@ -64,21 +64,20 @@ def main_worker(rank, world_size):
     # 指定使用的gpu，后面就可以直接使用.cuda()
     torch.cuda.set_device(rank)
 
-    train_list = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan/train_list_1.csv'
-    val_list = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan/val_list_1.csv'
+    train_list = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan_coarse_10000/train_list_1.csv'
+    val_list = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan_coarse_10000/val_list_1.csv'
 
-    # train_list = 'D:\\users\\xsf\\Dataset\\OralScan\\train_list_1.csv'
-    # val_list = 'D:\\users\\xsf\\Dataset\\OralScan\\val_list_1.csv'
 
-    model_path = 'models/14/'
-    model_name = 'MeshSegNet_15_classes'  # need to define
+    model_path = 'models/coarse_1/'
+    model_name = 'MeshSegNet_1_classes'  # need to define
     checkpoint_name = 'latest_checkpoint.tar'
 
-    num_classes = 17
+    # 粗糙分割，只有两类
+    num_classes = 2
     num_channels = 18  # number of features
-    num_epochs = 600
-    num_workers = 8
-    train_batch_size = 8
+    num_epochs = 200
+    num_workers = 16
+    train_batch_size = 16
     val_batch_size = 1
     num_batches_to_print = 10
     # 加载预训练模型
@@ -194,8 +193,8 @@ def main_worker(rank, world_size):
             outputs = model(inputs, A_S, A_L)
 
             # 计算损失的时候还考虑了类别权重
-            # loss = Generalized_Dice_Loss(outputs, one_hot_labels, class_weights)
-            loss = CELoss(outputs, one_hot_labels)
+            loss = Generalized_Dice_Loss(outputs, one_hot_labels, class_weights)
+            # loss = CELoss(outputs, one_hot_labels)
 
             # 计算加权之后的评价指标
             dsc = weighting_DSC(outputs, one_hot_labels, class_weights)

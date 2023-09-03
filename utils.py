@@ -32,7 +32,9 @@ class VisdomLinePlotter(object):
                 legend=[split_name],
                 title=title_name,
                 xlabel='Epochs',
-                ylabel=var_name
+                ylabel=var_name,
+                xtickstep=10,
+                ytickstep=0.05
             ))
         else:
             self.viz.line(X=np.array([x]), Y=np.array([y]), env=self.env, win=self.plots[var_name], name=split_name, update = 'append')
