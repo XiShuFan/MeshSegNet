@@ -64,8 +64,8 @@ def main_worker(rank, world_size):
     # 指定使用的gpu，后面就可以直接使用.cuda()
     torch.cuda.set_device(rank)
 
-    train_list = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan_coarse_10000/train_list_1.csv'
-    val_list = '/media/why/77B8B456EE73FE06/users/xsf_ubuntu/Dataset/OralScan_coarse_10000/val_list_1.csv'
+    train_list = '/media/why/新加卷/xsf/Dataset/OralScan_coarse_10000/train_list_1.csv'
+    val_list = '/media/why/新加卷/xsf/Dataset/OralScan_coarse_10000/val_list_1.csv'
 
 
     model_path = 'models/coarse_1/'
@@ -76,8 +76,8 @@ def main_worker(rank, world_size):
     num_classes = 2
     num_channels = 18  # number of features
     num_epochs = 200
-    num_workers = 16
-    train_batch_size = 16
+    num_workers = 4
+    train_batch_size = 4
     val_batch_size = 1
     num_batches_to_print = 10
     # 加载预训练模型

@@ -1,4 +1,6 @@
 import os
+import random
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -16,25 +18,54 @@ from sklearn.neighbors import KNeighborsClassifier
 from pygco import cut_from_graph
 import utils
 
+
+def assign_color(mesh):
+    """
+    按照mesh的标签，给点上色
+    """
+    labels = mesh.celldata['Label']
+    cells = mesh.cells()
+
+    # 可视化结果
+    visualize_mesh = mesh.clone()
+
+    for idx, label in enumerate(labels):
+        cell = cells[idx]
+        # 设置点的颜色
+        if label == 1:
+            color = np.array([255, 255, 0, 255])
+        else:
+            color = np.array([255, 255, 255, 255])
+        visualize_mesh.pointcolors[cell[0]] = color
+        visualize_mesh.pointcolors[cell[1]] = color
+        visualize_mesh.pointcolors[cell[2]] = color
+    return visualize_mesh
+
+
 if __name__ == '__main__':
 
     gpu_id = utils.get_avail_gpu()
     torch.cuda.set_device(gpu_id) # assign which gpu will be used (only linux works)
 
+    # 上采样方法选择K最近邻
     # upsampling_method = 'SVM'
     upsampling_method = 'KNN'
 
-    model_path = './models/10'
-    model_name = 'MeshSegNet_15_classes_best.tar'
+    model_path = './models/coarse_1'
+    model_name = 'MeshSegNet_1_classes_best.tar'
 
-    mesh_path = 'D:\\Dataset'  # need to modify
-    sample_filenames = ['lower.ply'] # need to modify
+    # 需要修改这里的文件
+    mesh_path = '/media/why/新加卷/xsf/Dataset/ply_file_cell_color_manifold'
+    sample_filenames = os.listdir(mesh_path)
+    # 测试一部分就行
+    sample_filenames = random.sample(sample_filenames, 100)
 
-    output_path = 'D:\\Dataset'
+    output_path = '/media/why/新加卷/xsf/Dataset/coarse_seg_result'
     if not os.path.exists(output_path):
         os.mkdir(output_path)
 
-    num_classes = 17
+    # 只有两类，牙齿和非牙齿
+    num_classes = 2
     num_channels = 18
 
     # set model
@@ -68,6 +99,7 @@ if __name__ == '__main__':
             target_num = 10000
             ratio = target_num/mesh.ncells # calculate ratio
             mesh_d = mesh.clone()
+            # TODO：可以调用vedo的下采样方法
             mesh_d.decimate(fraction=ratio)
             predicted_labels_d = np.zeros([mesh_d.ncells, 1], dtype=np.int32)
 
@@ -152,6 +184,8 @@ if __name__ == '__main__':
             # output downsampled predicted labels
             mesh2 = mesh_d.clone()
             mesh2.celldata['Label'] = predicted_labels_d
+            mesh2.celldata.select('Label')
+            mesh2 = assign_color(mesh2)
             vedo.write(mesh2, os.path.join(output_path, '{}_d_predicted.ply'.format(i_sample[:-4])), binary=False) # 这里要么记录标签，要么给面片附上颜色
 
             # refinement
@@ -211,15 +245,17 @@ if __name__ == '__main__':
             # output refined result
             mesh3 = mesh_d.clone()
             mesh3.celldata['Label'] = refine_labels
+            mesh3.celldata.select('Label')
+            mesh3 = assign_color(mesh3)
             vedo.write(mesh3, os.path.join(output_path, '{}_d_predicted_refined.ply'.format(i_sample[:-4])), binary=False)
 
             # upsampling
             print('\tUpsampling...')
-            if mesh.ncells > 50000:
-                target_num = 50000 # set max number of cells
-                ratio = target_num/mesh.ncells # calculate ratio
-                mesh.decimate(fraction=ratio)
-                print('Original contains too many cells, simpify to {} cells'.format(mesh.ncells))
+            # TODO: 这里要保证原始精度，就别下采样了
+            # if mesh.ncells > 50000: target_num = 50000 # set max number of cells
+            # ratio = target_num/mesh.ncells # calculate ratio
+            # mesh.decimate(fraction=ratio)
+            # print('Original contains too many cells, simpify to {} cells'.format(mesh.ncells))
 
             # get fine_cells
             barycenters = mesh3.cell_centers() # don't need to copy
@@ -242,6 +278,8 @@ if __name__ == '__main__':
                 fine_labels = fine_labels.reshape(-1, 1)
 
             mesh.celldata['Label'] = fine_labels
+            mesh.celldata.select('Label')
+            mesh = assign_color(mesh)
             vedo.write(mesh, os.path.join(output_path, '{}_predicted_refined.ply'.format(i_sample[:-4])), binary=False)
 
             end_time = time.time()
