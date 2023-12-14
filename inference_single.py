@@ -2,7 +2,7 @@ import os
 import numpy as np
 import torch
 import torch.nn as nn
-from meshsegnet import *
+from meshsegnet_bn import *
 import vedo
 import pandas as pd
 from losses_and_metrics_for_mesh import *
